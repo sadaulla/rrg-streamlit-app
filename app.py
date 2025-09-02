@@ -154,7 +154,6 @@ with st.sidebar:
     st.header("⚙️ Controls")
     default_universe = "RELIANCE.NS, TCS.NS, INFY.NS, HDFCBANK.NS, ICICIBANK.NS"
 	tickers_str = st.text_area("Tickers (comma-separated)", value=default_universe, height=90)
-    # benchmark = st.text_input("Benchmark ticker", value="^NSEI", help="e.g., ^NSEI, ^NSEBANK, NIFTYBEES.NS")
 	benchmark = st.text_input("Benchmark ticker", value="^BSESN", help="e.g., ^NSEI, ^NSEBANK, NIFTYBEES.NS")
     col_a, col_b = st.columns(2)
     with col_a:
@@ -201,4 +200,5 @@ if run:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
 
