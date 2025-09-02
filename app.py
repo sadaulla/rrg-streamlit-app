@@ -151,21 +151,21 @@ st.set_page_config(page_title="RRG — Strike-style", layout="wide")
 st.title("📈 Relative Rotation Graph (RRG) — Strike-style (Python)")
 
 with st.sidebar:
-    st.header("⚙️ Controls")
-    default_universe = "RELIANCE.NS, TCS.NS, INFY.NS, HDFCBANK.NS, ICICIBANK.NS"
+	st.header("⚙️ Controls")
+	default_universe = "RELIANCE.NS, TCS.NS, INFY.NS, HDFCBANK.NS, ICICIBANK.NS"
 	tickers_str = st.text_area("Tickers (comma-separated)", value=default_universe, height=90)
 	benchmark = st.text_input("Benchmark ticker", value="^BSESN", help="e.g., ^NSEI, ^NSEBANK, NIFTYBEES.NS")
-    col_a, col_b = st.columns(2)
-    with col_a:
-        start_date = st.date_input("Start", value=pd.Timestamp.today() - pd.Timedelta(days=365*3))
-    with col_b:
-        end_date = st.date_input("End", value=pd.Timestamp.today())
+	col_a, col_b = st.columns(2)
+	with col_a:
+		start_date = st.date_input("Start", value=pd.Timestamp.today() - pd.Timedelta(days=365*3))
+	with col_b:
+		end_date = st.date_input("End", value=pd.Timestamp.today())
 
-    tf = st.selectbox("Timeframe", options=["Daily", "Weekly", "Monthly"], index=0)
-    span_ratio = st.slider("RS-Ratio EMA span", min_value=5, max_value=60, value=20, step=1)
-    span_mom = st.slider("RS-Momentum EMA span", min_value=3, max_value=30, value=5, step=1)
-    tail = st.slider("Tail length (periods)", min_value=1, max_value=60, value=15, step=1)
-    run = st.button("▶️ Run RRG")
+	tf = st.selectbox("Timeframe", options=["Daily", "Weekly", "Monthly"], index=0)
+	span_ratio = st.slider("RS-Ratio EMA span", min_value=5, max_value=60, value=20, step=1)
+	span_mom = st.slider("RS-Momentum EMA span", min_value=3, max_value=30, value=5, step=1)
+	tail = st.slider("Tail length (periods)", min_value=1, max_value=60, value=15, step=1)
+	run = st.button("▶️ Run RRG")
 
 # ------------------------
 # Run logic
@@ -200,5 +200,6 @@ if run:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
 
 
