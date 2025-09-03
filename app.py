@@ -17,16 +17,15 @@ def calculate_rsi(series, window=14):
 
 st.title("📈 RSI Calculator (Last 1 Month)")
 
-ticker = st.text_input("Enter Stock Ticker (e.g., RELIANCE.NS, AAPL):", "AAPL")
+ticker = st.text_input("Enter Stock Ticker (e.g., RELIANCE.NS, AAPL):", "RELIANCE.NS")
 
 if st.button("Get Data"):
     try:
-        # Fetch last 2 months, safer than start/end
-        df = yf.download(ticker, period="2mo", interval="1d", progress=False)
+        ticker_obj = yf.Ticker(ticker)
+        df = ticker_obj.history(period="2mo", interval="1d")
 
         if not df.empty:
-            # Keep last 30 days
-            df = df.tail(30)
+            df = df.tail(30)  # last 1 month
             df["RSI"] = calculate_rsi(df["Close"])
             df = df[["Close", "RSI"]].dropna()
 
@@ -261,6 +260,7 @@ if run:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)'''
+
 
 
 
