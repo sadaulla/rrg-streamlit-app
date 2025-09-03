@@ -8,8 +8,8 @@ def calculate_rsi(series, window=14):
     gain = delta.where(delta > 0, 0.0)
     loss = -delta.where(delta < 0, 0.0)
 
-    avg_gain = gain.rolling(window=window, min_periods=window).mean()
-    avg_loss = loss.rolling(window=window, min_periods=window).mean()
+    avg_gain = gain.rolling(window=window, min_periods=1).mean()
+    avg_loss = loss.rolling(window=window, min_periods=1).mean()
 
     rs = avg_gain / avg_loss
     rsi = 100 - (100 / (1 + rs))
@@ -18,13 +18,13 @@ def calculate_rsi(series, window=14):
 # Streamlit app
 st.title("📈 RSI Calculator (Last 1 Month)")
 
-ticker = st.text_input("Enter Stock Ticker (e.g., RELIANCE.NS, AAPL):", "RELIANCE.NS")
+ticker = st.text_input("Enter Stock Ticker (e.g., RELIANCE.NS, AAPL):", "AAPL")
 
 if st.button("Get Data"):
     try:
-        # Download last 1 month data
-        df = yf.download(ticker, period="1mo", interval="1d")
-        
+        # Download last 1 month of daily data
+        df = yf.download(ticker, start=pd.Timestamp.today() - pd.Timedelta(days=30), end=pd.Timestamp.today(), interval="1d")
+
         if not df.empty:
             df["RSI"] = calculate_rsi(df["Close"])
             df = df[["Close", "RSI"]].dropna()
@@ -33,9 +33,10 @@ if st.button("Get Data"):
             st.dataframe(df)
 
         else:
-            st.error("No data found. Please check the ticker symbol.")
+            st.error("No data found. Please check the ticker symbol or try another.")
     except Exception as e:
         st.error(f"Error: {e}")
+
 
 
 
@@ -253,6 +254,7 @@ if run:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)'''
+
 
 
 
