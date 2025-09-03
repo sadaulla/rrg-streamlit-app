@@ -28,6 +28,8 @@ if st.button("Get Data"):
 
         # Download last 30 days of daily data
         df = yf.download(ticker, start=start_date, end=end_date, interval="1d")
+        st.write("Downloaded data preview:", df.head())
+        st.write("Shape:", df.shape)
 
         if not df.empty:
             df["RSI"] = calculate_rsi(df["Close"])
@@ -266,6 +268,7 @@ if run:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)'''
+
 
 
 
