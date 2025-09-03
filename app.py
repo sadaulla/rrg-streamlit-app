@@ -1,64 +1,4 @@
-import streamlit as st
-import yfinance as yf
-import pandas as pd
-
-# RSI calculation
-def calculate_rsi(series, window=14):
-    delta = series.diff()
-    gain = delta.where(delta > 0, 0.0)
-    loss = -delta.where(delta < 0, 0.0)
-
-    avg_gain = gain.rolling(window=window, min_periods=1).mean()
-    avg_loss = loss.rolling(window=window, min_periods=1).mean()
-
-    rs = avg_gain / avg_loss
-    rsi = 100 - (100 / (1 + rs))
-    return rsi
-
-st.title("📈 RSI Calculator (Last 1 Month)")
-
-ticker = st.text_input("Enter Stock Ticker (e.g., RELIANCE.NS, AAPL):", "RELIANCE.NS")
-
-if st.button("Get Data"):
-    try:
-        ticker_obj = yf.Ticker(ticker)
-        df = ticker_obj.history(period="2mo", interval="1d")
-
-        if not df.empty:
-            df = df.tail(30)  # last 1 month
-            df["RSI"] = calculate_rsi(df["Close"])
-            df = df[["Close", "RSI"]].dropna()
-
-            st.subheader(f"RSI for {ticker} (Last 1 Month)")
-            st.dataframe(df)
-
-            st.subheader("📊 RSI Chart")
-            st.line_chart(df[["RSI"]])
-
-            st.subheader("📊 Closing Price Chart")
-            st.line_chart(df[["Close"]])
-        else:
-            st.error("No data found. Please check the ticker symbol or try another.")
-    except Exception as e:
-        st.error(f"Error: {e}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''# streamlit_app.py
+# streamlit_app.py
 # ----------------------------
 # Strike-style RRG — fixed benchmark handling
 # ----------------------------
@@ -259,7 +199,8 @@ if run:
 
     except Exception as e:
         st.error(f"Error: {e}")
-        st.exception(e)'''
+        st.exception(e)
+
 
 
 
