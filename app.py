@@ -1,9 +1,8 @@
 import streamlit as st
 import yfinance as yf
 import pandas as pd
-from datetime import datetime, timedelta
 
-# RSI calculation function
+# RSI calculation
 def calculate_rsi(series, window=14):
     delta = series.diff()
     gain = delta.where(delta > 0, 0.0)
@@ -16,33 +15,27 @@ def calculate_rsi(series, window=14):
     rsi = 100 - (100 / (1 + rs))
     return rsi
 
-# Streamlit app
 st.title("📈 RSI Calculator (Last 1 Month)")
 
 ticker = st.text_input("Enter Stock Ticker (e.g., RELIANCE.NS, AAPL):", "AAPL")
 
 if st.button("Get Data"):
     try:
-        end_date = datetime.today()
-        start_date = end_date - timedelta(days=30)
-
-        # Download last 30 days of daily data
-        df = yf.download(ticker, start=start_date, end=end_date, interval="1d")
-        st.write("Downloaded data preview:", df.head())
-        st.write("Shape:", df.shape)
+        # Fetch last 2 months, safer than start/end
+        df = yf.download(ticker, period="2mo", interval="1d", progress=False)
 
         if not df.empty:
+            # Keep last 30 days
+            df = df.tail(30)
             df["RSI"] = calculate_rsi(df["Close"])
             df = df[["Close", "RSI"]].dropna()
 
             st.subheader(f"RSI for {ticker} (Last 1 Month)")
             st.dataframe(df)
 
-            # Plot RSI
             st.subheader("📊 RSI Chart")
             st.line_chart(df[["RSI"]])
 
-            # Plot Closing Price
             st.subheader("📊 Closing Price Chart")
             st.line_chart(df[["Close"]])
         else:
@@ -268,6 +261,7 @@ if run:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)'''
+
 
 
 
