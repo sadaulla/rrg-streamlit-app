@@ -22,8 +22,8 @@ ticker = st.text_input("Enter Stock Ticker (e.g., RELIANCE.NS, AAPL):", "AAPL")
 
 if st.button("Get Data"):
     try:
-        # Download last 1 month of daily data
-        df = yf.download(ticker, start=pd.Timestamp.today() - pd.Timedelta(days=30), end=pd.Timestamp.today(), interval="1d")
+        # Download last 1 month daily data
+        df = yf.download(ticker, period="1mo", interval="1d")
 
         if not df.empty:
             df["RSI"] = calculate_rsi(df["Close"])
@@ -32,10 +32,19 @@ if st.button("Get Data"):
             st.subheader(f"RSI for {ticker} (Last 1 Month)")
             st.dataframe(df)
 
+            # Plot RSI
+            st.subheader("📊 RSI Chart")
+            st.line_chart(df[["RSI"]])
+
+            # Plot Closing Price
+            st.subheader("📊 Closing Price Chart")
+            st.line_chart(df[["Close"]])
+
         else:
-            st.error("No data found. Please check the ticker symbol or try another.")
+            st.error("No data found. Please check the ticker symbol.")
     except Exception as e:
         st.error(f"Error: {e}")
+
 
 
 
@@ -254,6 +263,7 @@ if run:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)'''
+
 
 
 
